@@ -1,89 +1,129 @@
 <template>
     <div class="slds-grid slds-grid_vertical slds-size_1-of-1" style="height:100vh;">
 
-        <!-- 🔹 Top Section (Map fixed height) -->
         <section class="slds-col" style="height:350px; flex: 0 0 auto;">
             <div class="slds-box slds-theme_shade" style="height:100%;">
-                <lightning-map
-                    map-markers={mapMarkers}
-                    zoom-level="6"
-                    list-view="hidden"
-                    show-footer
-                    style="height:100%; width:100%;">
-                </lightning-map>
+                <template if:true={hasMarkers}>
+                    <lightning-map
+                        map-markers={mapMarkers}
+                        zoom-level="8"
+                        list-view="hidden"
+                        center={mapCenter}
+                        show-footer
+                        style="height:100%; width:100%;">
+                    </lightning-map>
+                </template>
             </div>
         </section>
 
-        <!-- 🔹 Middle Section (Fixed ~150px height for Control Panel) -->
-        <section class="slds-col" style="height:150px; flex: 0 0 auto;">
-            <div class="slds-card" style="height:100%;">
-                <header class="slds-card__header slds-grid">
-                    <div class="slds-media slds-media_center slds-has-flexi-truncate">
-                        <div class="slds-media__body">
-                            <h2 class="slds-card__header-title">
-                                <span>Control Panel</span>
-                            </h2>
-                        </div>
-                    </div>
-                </header>
-                <div class="slds-card__body slds-card__body_inner">
-                    <p class="slds-text-body_regular slds-p-around_small">Coming soon...</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 🔹 Bottom Section (Tabs + Tables, auto expand with data) -->
         <section class="slds-col slds-size_1-of-1" style="flex: 1 1 auto;">
             <div class="slds-box slds-theme_shade" style="padding:0; width:100%;">
                 <div class="slds-card" style="width:100%;">
-                    
                     <div class="slds-card__body slds-card__body_inner" style="padding:0; width:100%;">
-                        <lightning-tabset 
-                            variant="scoped" 
-                            active-tab-value={selectedObject} 
-                            onactive={handleTabChange} 
-                            class="slds-size_1-of-1" 
+                        
+                        <lightning-tabset
+                            variant="scoped"
+                            active-tab-value={selectedObject}
+                            onactive={handleTabChange}
+                            class="slds-size_1-of-1"
                             style="width:100%;">
 
-                            <!-- Account Tab -->
                             <lightning-tab label="Account" value="Account" icon-name="standard:account">
                                 <div class="slds-box slds-border_all" style="margin:0.5rem; width:100%;">
+                                    
+                                    <div class="slds-page-header slds-grid slds-grid_align-end slds-m-bottom_x-small">
+                                        <lightning-button-icon
+                                            icon-name="utility:refresh"
+                                            alternative-text="Refresh"
+                                            data-object="Account"
+                                            onclick={handleRefreshClick}
+                                            variant="border-filled"
+                                            size="small"
+                                            class="slds-m-right_small">
+                                        </lightning-button-icon>
+
+                                        <lightning-button
+                                            label="New"
+                                            variant="brand"
+                                            data-object="Account"
+                                            onclick={handleNewClick}>
+                                        </lightning-button>
+                                    </div>
+
                                     <lightning-datatable
-                                        key-field="id"
+                                        key-field="Id"
                                         data={accountData}
                                         columns={accountColumns}
-                                        hide-checkbox-column
                                         onrowaction={handleRowAction}
+                                        onrowselection={handleRowSelection}
                                         class="slds-size_1-of-1"
                                         style="width:100%;">
                                     </lightning-datatable>
                                 </div>
                             </lightning-tab>
 
-                            <!-- Lead Tab -->
                             <lightning-tab label="Lead" value="Lead" icon-name="standard:lead">
                                 <div class="slds-box slds-border_all" style="margin:0.5rem; width:100%;">
+                                    
+                                    <div class="slds-page-header slds-grid slds-grid_align-end slds-m-bottom_x-small">
+                                        <lightning-button-icon
+                                            icon-name="utility:refresh"
+                                            alternative-text="Refresh"
+                                            data-object="Lead"
+                                            onclick={handleRefreshClick}
+                                            variant="border-filled"
+                                            size="small"
+                                            class="slds-m-right_small">
+                                        </lightning-button-icon>
+
+                                        <lightning-button
+                                            label="New"
+                                            variant="brand"
+                                            data-object="Lead"
+                                            onclick={handleNewClick}>
+                                        </lightning-button>
+                                    </div>
+
                                     <lightning-datatable
-                                        key-field="id"
+                                        key-field="Id"
                                         data={leadData}
                                         columns={leadColumns}
-                                        hide-checkbox-column
                                         onrowaction={handleRowAction}
+                                        onrowselection={handleRowSelection}
                                         class="slds-size_1-of-1"
                                         style="width:100%;">
                                     </lightning-datatable>
                                 </div>
                             </lightning-tab>
 
-                            <!-- Opportunity Tab -->
                             <lightning-tab label="Opportunity" value="Opportunity" icon-name="standard:opportunity">
                                 <div class="slds-box slds-border_all" style="margin:0.5rem; width:100%;">
+                                    
+                                    <div class="slds-page-header slds-grid slds-grid_align-end slds-m-bottom_x-small">
+                                        <lightning-button-icon
+                                            icon-name="utility:refresh"
+                                            alternative-text="Refresh"
+                                            data-object="Opportunity"
+                                            onclick={handleRefreshClick}
+                                            variant="border-filled"
+                                            size="small"
+                                            class="slds-m-right_small">
+                                        </lightning-button-icon>
+
+                                        <lightning-button
+                                            label="New"
+                                            variant="brand"
+                                            data-object="Opportunity"
+                                            onclick={handleNewClick}>
+                                        </lightning-button>
+                                    </div>
+
                                     <lightning-datatable
-                                        key-field="id"
+                                        key-field="Id"
                                         data={opportunityData}
                                         columns={opportunityColumns}
-                                        hide-checkbox-column
                                         onrowaction={handleRowAction}
+                                        onrowselection={handleRowSelection}
                                         class="slds-size_1-of-1"
                                         style="width:100%;">
                                     </lightning-datatable>
@@ -96,21 +136,20 @@
             </div>
         </section>
 
-        <!-- 🔹 Modal for Editing -->
         <template if:true={isModalOpen}>
             <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
                 <div class="slds-modal__container">
 
-                    <!-- Header -->
                     <header class="slds-modal__header">
                         <h2 class="slds-text-heading_medium">Edit {modalObjectType}</h2>
-                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
-                                onclick={closeModal} title="Close">
+                        <button
+                            class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse"
+                            onclick={closeModal}
+                            title="Close">
                             <lightning-icon icon-name="utility:close" size="small"></lightning-icon>
                         </button>
                     </header>
 
-                    <!-- Body -->
                     <div class="slds-modal__content slds-p-around_medium">
                         <lightning-record-edit-form
                             object-api-name={modalObjectType}
@@ -144,6 +183,7 @@
                     </div>
                 </div>
             </section>
+
             <div class="slds-backdrop slds-backdrop_open"></div>
         </template>
 
